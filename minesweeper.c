@@ -322,7 +322,8 @@ void flood(gamedata_t * game)
 
 void checkflags(gamedata_t * game)
 {
-    int flagged = 0;
+    // int flagged = 0;
+    enum gamestatus status = WIN;
 
     // If all the tiles have been opened or flagged, check for correctness
     for (int row = 0; row < game->size.first; row++) {
@@ -336,13 +337,14 @@ void checkflags(gamedata_t * game)
                 return;
             }
 
-            if (tile & TILE_FLAGGED) {
-                flagged++;
+            // If the tile has been flagged wrongly, gameover
+            if ((tile & TILE_FLAGGED) && !(tile & TILE_MINED)) {
+                status = GAMEOVER;
             }
         }
     }
 
-    game->status = flagged == game->mines ? WIN : GAMEOVER;
+    game->status = status;
     return;
 }
 
